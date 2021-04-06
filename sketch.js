@@ -6,6 +6,8 @@ let Resolution = 10;
 let counter = 0;
 
 let osc1;
+let osc2;
+let osc3;
 
 function preload() {
     img = loadImage("./assets/Render1/0160.png");
@@ -27,21 +29,58 @@ function setup() {
     osc1.amp(0.5);
     osc1.start();
 
+    osc2 = new p5.SinOsc(440); 
+    osc2.amp(0.5);
+    osc2.start();
+
+    osc3 = new p5.SinOsc(440); 
+    osc3.amp(0.5);
+    osc3.start();
+
     print(imgs);
 
     setInterval(() => {
         for (let i = 0; i < imgs[counter].width; i+= Resolution) {
             for (let j = 0; j < imgs[counter].height; j+= Resolution) {
                 let c = imgs[counter].get(i, j);
-                stroke(color(c));
                 if (i == imgs[counter].width / 2 && j == imgs[counter].height / 2) {
                     print("Half point");
                     strokeWeight(Resolution * 2);
+                    stroke(0);
                     point(i, j);
-                    osc1.freq(c[0] + 1 * 2);
-                    print("Center color", c[0] + 1 * 2);
+
+                    let pitch = map(c[0], 0, 255, 880, 20);
+                    let osc1Amp = map(c[0], 1, 255, 0.5, 0);
+
+                    osc1.freq(pitch);
+                    osc1.amp(osc1Amp);
+                    osc1.pan(0);
+                    print("pitch", pitch, "vol", osc1Amp);
+                }else if (i == imgs[counter].width / 2 / 2 && j == imgs[counter].height / 2) {
+                    strokeWeight(Resolution * 2);
+                    stroke(0);
+                    point(i, j);
+                    let pitch = map(c[0], 0, 255, 880, 20);
+                    let osc1Amp = map(c[0], 1, 255, 0.5, 0);
+
+                    osc2.freq(pitch);
+                    osc2.amp(osc1Amp);
+                    osc2.pan(-1);
+                }else if (i == imgs[counter].width - (imgs[counter].width / 4) && j == imgs[counter].height / 2) {
+                    strokeWeight(Resolution * 2);
+                    stroke(0);
+                    point(i, j);
+                    
+                    let pitch = map(c[0], 0, 255, 880, 20);
+                    let osc1Amp = map(c[0], 1, 255, 0.5, 0);
+
+                    osc3.freq(pitch);
+                    osc3.amp(osc1Amp);
+                    osc3.pan(1);
+                    
                 }else {
                     strokeWeight(Resolution);
+                    stroke(color(c));
                     point(i, j);
                 }
             }     
